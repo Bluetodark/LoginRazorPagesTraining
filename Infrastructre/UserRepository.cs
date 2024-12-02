@@ -1,19 +1,29 @@
 ﻿using Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
+using System.Data.Common;
 
-public class UserRepository
+namespace Infrastructure
 {
-    private readonly MyDbContext _context;
-
-    public UserRepository(MyDbContext context)
+    public class UserRepository
     {
-        _context = context;
-    }
+        private readonly MyDbContext _context;
 
-    //public List<User> GetUsers()
-    //{
-    //    // Use raw SQL to query the 'accounts' table
-    //    string sqlQuery = "SELECT Id, Username, Email FROM accounts";
-    //    return _context.Users.FromSqlRaw(sqlQuery).ToList(); // Assumes you still want a list of users, but no automatic mapping
-    //}
+        public UserRepository(MyDbContext context)
+        {
+            _context = context;
+        }
+
+        public DbDataReader ExecuteSql(string sqlQuery)
+        {
+            var connection = _context.Database.GetDbConnection();
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText = sqlQuery;
+
+            // Return the reader directly but ensure it is used and disposed properly by the caller
+            return command.ExecuteReader(CommandBehavior.CloseConnection);
+        }
+    }
 }

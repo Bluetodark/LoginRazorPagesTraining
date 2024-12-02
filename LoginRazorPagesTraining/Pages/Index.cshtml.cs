@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 using System.Diagnostics.Eventing.Reader;
+using Infrastructure;
+using Domain;
 
 namespace LoginRazorPagesTraining.Pages
 {
@@ -22,7 +24,15 @@ namespace LoginRazorPagesTraining.Pages
 
         public void OnGet()
         {
+            // Directly instantiate MyDbContext without DbContextOptions
+            var dbContext = new MyDbContext();
 
+            // Create UserRepository and UserManager
+            var userRepository = new UserRepository(dbContext);
+            var userManager = new UserManager(userRepository);
+
+            // Fetch users
+            userManager.GetUsers();
         }
 
         public IActionResult OnPost()
@@ -31,8 +41,10 @@ namespace LoginRazorPagesTraining.Pages
             Console.WriteLine(Login.UserName);
             Console.WriteLine(Login.Password);
 
-            //domain Layer Code
-            Domain.UserManager userManager = new Domain.UserManager();
+            var dbContext = new MyDbContext();
+            var userRepository = new UserRepository(dbContext);
+
+            Domain.UserManager userManager = new Domain.UserManager(userRepository);
 
             if (userManager.ValidateUser(Login.UserName, Login.Password)) {
                 List<Claim> claims = new List<Claim>();

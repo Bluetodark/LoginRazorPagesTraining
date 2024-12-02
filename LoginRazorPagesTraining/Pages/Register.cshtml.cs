@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using LoginRazorPagesTraining.ViewModels.Requests;
+using Infrastructure;
+using Domain;
+using Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace LoginRazorPagesTraining.Pages
 {
@@ -11,6 +15,15 @@ namespace LoginRazorPagesTraining.Pages
 
         public void OnGet()
         {
+            // Directly instantiate MyDbContext without DbContextOptions
+            var dbContext = new MyDbContext();
+
+            // Create UserRepository and UserManager
+            var userRepository = new UserRepository(dbContext);
+            var userManager = new UserManager(userRepository);
+
+            // Fetch users
+            userManager.GetUsers();
         }
 
         public IActionResult OnPost()
@@ -20,7 +33,10 @@ namespace LoginRazorPagesTraining.Pages
                 return Page();
             }
 
-            Domain.UserManager userManager = new Domain.UserManager();
+            var dbContext = new MyDbContext();
+            var userRepository = new UserRepository(dbContext);
+
+            Domain.UserManager userManager = new Domain.UserManager(userRepository);
 
             if (userManager.RegisterUser(Registration.UserName, Registration.ConfirmPassword)) {
                 Console.WriteLine("Registration successful! You can now log in."); 
