@@ -1,0 +1,49 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Login";
+}
+<div class="bg-dark text-light d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6 col-sm-8">
+                <div class="card bg-secondary text-light shadow">
+                    <div class="card-body">
+                        <h5 class="card-title text-center mb-4">Inloggen</h5>
+                        <form method="post">
+
+                            <div class="mb-3">
+                                <label for="username" class="form-label">UserName</label>
+                                <span asp-validation-for="Login.UserName" class="field-validation-error alert-danger"></span>
+                                <input asp-for="Login.UserName" type="text" class="form-control field-validation-error" id="username" placeholder="username">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Wachtwoord</label>
+                                <span asp-validation-for="Login.Password" class="field-validation-error alert-danger"></span>
+                                <input asp-for="Login.Password" type="password" class="form-control field-validation-error" id="password" placeholder="Wachtwoord">
+                            </div>
+
+                            <div class="form-check mb-3">
+                                <input type="checkbox" class="form-check-input" id="rememberMe">
+                                <label class="form-check-label" for="rememberMe">blijf ingelogd</label>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">Login</button>
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="d-grid">
+                        <a asp-area="" asp-page="/Register" type="submit" class="btn btn-info">Register</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

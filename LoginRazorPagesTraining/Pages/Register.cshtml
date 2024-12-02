@@ -1,0 +1,54 @@
+﻿@page
+@model LoginRazorPagesTraining.Pages.RegisterModel
+@{
+}
+<div class="bg-dark text-light d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6 col-sm-8">
+                <div class="card bg-secondary text-light shadow">
+                    <div class="card-body">
+                        <h5 class="card-title text-center mb-4">Inloggen</h5>
+                        <form method="post">
+
+                            <div class="mb-3">
+                                <label class="form-label">First Name:<sup>*</sup></label>
+                                <span asp-validation-for="Registration.UserName" class="field-validation-error alert-danger"></span>
+                                <input class="form-control" asp-for="Registration.UserName" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">E-Mail:<sup></sup></label>
+                                <span asp-validation-for="Registration.Email" class="field-validation-error alert-danger"></span>
+                                <input class="form-control" asp-for="Registration.Email">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Password:<sup>*</sup></label>
+                                <span asp-validation-for="Registration.Password" class="field-validation-error alert-danger"></span>
+                                <input class="form-control" asp-for="Registration.Password">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Confirm password:<sup>*</sup></label>
+                                <span asp-validation-for="Registration.ConfirmPassword" class="field-validation-error alert-danger"></span>
+                                <input class="form-control" asp-for="Registration.ConfirmPassword">
+                            </div>
+
+                            <div class="mb-3">
+                                <input type="submit" class="btn btn-success" value="Save">
+                                <input type="reset" class="btn btn-danger" value="reset">
+                            </div>
+
+                        </form>
+                        <a asp-area="" asp-page="/Index" type="submit" class="btn btn-primary">Back</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
