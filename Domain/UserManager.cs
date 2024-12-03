@@ -1,36 +1,13 @@
-﻿using Infrastructure;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Infrastructure;
 
 namespace Domain
 {
-    //public class UserManager
-    //{
-    //    //hardcoded user list
-    //    private static List<User> users = new List<User> {
-    //        new User { ID = 1234, Username = "admin", Password = "1234" },
-    //        new User { ID = 1235, Username = "user", Password = "password" }
-    //    };
-    //    public bool ValidateUser(string username, string password)
-    //    {
-    //        return users.Any(user => user.Username == username && user.Password == password);
-    //    }
-
-    //    public bool RegisterUser(string username, string password)
-    //    {
-    //        if (users.Any(user => user.Username == username))
-    //        {
-    //            return false; // Username already exists
-    //        }
-
-    //        users.Add(new User { ID = 1234, Username = username, Password = password }); 
-    //        return true; 
-    //    }
-    //}
-    public class UserManager
+    public class UserManager : Interfaces.IUserManager
     {
         public readonly Infrastructure.UserRepository _repository;
         private static List<User> users = new List<User>();
@@ -64,19 +41,30 @@ namespace Domain
             return users;
         }
 
-        public bool ValidateUser(string username, string password)
+        public bool ValidateUser(User user)
         {
-            return users.Any(user => user.Username == username && user.Password == password);
+            return users.Any(user => user.Username == user.username && user.Password == user.password);
         }
 
-        public bool RegisterUser(string username, string password)
+        public User GetUserById(int id)
         {
-            if (users.Any(user => user.Username == username))
+            // Implementation for fetching a user by ID
+            return new User();
+        }
+
+        public void DeleteUser(int id)
+        { 
+            // Implementation for deleting a user
+        }
+
+        public bool CreateUser(User user)
+        {
+            if (users.Any(user => user.Username == user.username))
             {
                 return false; // Username already exists
             }
 
-            users.Add(new User { Id = 1234, Username = username, Password = password });
+            users.Add(new User { Id = 1234, Username = user.username, Password = user.password });
             return true;
         }
     }
