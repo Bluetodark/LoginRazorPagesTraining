@@ -8,9 +8,10 @@ namespace Domain.Interfaces
 {
     public interface IUserManager
     {
-        bool CreateUser(User user);
+        List<User> GetUsers();
+        bool ValidateUser(string username, string password);
         User GetUserById(int id);
+        bool CreateUser(string username, string password);
         void DeleteUser(int id);
-        bool ValidateUser(User user);
     }
 }

@@ -44,7 +44,7 @@ namespace LoginRazorPagesTraining.Pages
             var dbContext = new MyDbContext();
             var userRepository = new UserRepository(dbContext);
 
-            Domain.UserManager userManager = new Domain.UserManager(userRepository);
+            Domain.Interfaces.IUserManager userManager = new Domain.UserManager(userRepository);
 
             if (userManager.ValidateUser(Login.UserName, Login.Password)) {
                 List<Claim> claims = new List<Claim>();

@@ -1,22 +1,21 @@
-﻿using System;
+﻿using Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Infrastructure;
 
 namespace Domain
 {
     public class UserManager : Interfaces.IUserManager
     {
-        public readonly Infrastructure.UserRepository _repository;
+        public readonly Infrastructre.Interfaces.IUserRepository _repository;
         private static List<User> users = new List<User>();
 
-        public UserManager(UserRepository repository)
+        public UserManager(Infrastructre.Interfaces.IUserRepository repository)
         {
             _repository = repository;
         }
-
 
         public List<User> GetUsers()
         {
@@ -41,9 +40,10 @@ namespace Domain
             return users;
         }
 
-        public bool ValidateUser(User user)
+        public bool ValidateUser(string username, string password)
         {
-            return users.Any(user => user.Username == user.username && user.Password == user.password);
+            string Correctpassword = _repository.GetPasswordByUsername(username);
+            return (Correctpassword == password);
         }
 
         public User GetUserById(int id)
@@ -53,18 +53,18 @@ namespace Domain
         }
 
         public void DeleteUser(int id)
-        { 
+        {
             // Implementation for deleting a user
         }
 
-        public bool CreateUser(User user)
+        public bool CreateUser(string username, string password)
         {
-            if (users.Any(user => user.Username == user.username))
+            if (users.Any(user => user.Username == username))
             {
                 return false; // Username already exists
             }
 
-            users.Add(new User { Id = 1234, Username = user.username, Password = user.password });
+            users.Add(new User { Id = 1234, Username = username, Password = password });
             return true;
         }
     }

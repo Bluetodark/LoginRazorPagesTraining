@@ -1,11 +1,13 @@
-﻿using Infrastructure;
+﻿using Infrastructre.Interfaces;
+using Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Data;
 using System.Data.Common;
 
 namespace Infrastructure
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly MyDbContext _context;
 
@@ -24,6 +26,25 @@ namespace Infrastructure
 
             // Return the reader directly but ensure it is used and disposed properly by the caller
             return command.ExecuteReader(CommandBehavior.CloseConnection);
+        }
+
+        public string GetPasswordByUsername(string username) {
+
+            var Query = "SELECT password FROM accounts WHERE username=\"" + username + "\";";
+
+            var reader = ExecuteSql(Query);
+
+            if (reader.Read()) // Make sure to read the first record
+            {
+                string password = reader.GetString(reader.GetOrdinal("password"));
+
+                if (!string.IsNullOrEmpty(password))
+                {
+                    return password;
+                }
+            }
+
+            return "failed";
         }
     }
 }
