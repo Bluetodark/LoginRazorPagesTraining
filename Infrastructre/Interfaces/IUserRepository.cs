@@ -12,5 +12,6 @@ namespace Infrastructre.Interfaces
     {
         string GetPasswordByUsername(string username);
         public DbDataReader ExecuteSql(string sqlQuery);
+        public void CreateUserInDb(string username, string password);
     }
 }

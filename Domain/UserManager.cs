@@ -57,12 +57,15 @@ namespace Domain
             // Implementation for deleting a user
         }
 
+
         public bool CreateUser(string username, string password)
         {
             if (users.Any(user => user.Username == username))
             {
                 return false; // Username already exists
             }
+
+            _repository.CreateUserInDb(username, password);
 
             users.Add(new User { Id = 1234, Username = username, Password = password });
             return true;

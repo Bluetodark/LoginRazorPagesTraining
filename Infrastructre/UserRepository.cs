@@ -1,6 +1,7 @@
 ﻿using Infrastructre.Interfaces;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Data;
 using System.Data.Common;
@@ -45,6 +46,21 @@ namespace Infrastructure
             }
 
             return "failed";
+        }
+
+        public void CreateUserInDb(string username, string password) {
+            var Query = "INSERT INTO `accounts` (`ID`, `username`, `password`) VALUES (NULL, '"+username+"', '"+password+"');";
+
+            var connection = _context.Database.GetDbConnection();
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText = Query;
+
+            command.ExecuteNonQuery(); // Use ExecuteNonQuery for INSERT statements
+
+            connection.Close(); // Close connection explicitly
+            return;
         }
     }
 }
