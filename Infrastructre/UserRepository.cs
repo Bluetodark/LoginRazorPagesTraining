@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Data;
 using System.Data.Common;
 using Domain.Interfaces;
+using Domain;
 
 namespace Infrastructure
 {
@@ -16,50 +17,63 @@ namespace Infrastructure
             _context = context;
         }
 
-        public DbDataReader ExecuteSql(string sqlQuery)
+        public User GetUserByUsername(string username)
         {
             var connection = _context.Database.GetDbConnection();
             connection.Open();
 
-            var command = connection.CreateCommand();
-            command.CommandText = sqlQuery;
+            const string query = "SELECT ID, username, password, email FROM accounts WHERE username = @username";
 
-            // Return the reader directly but ensure it is used and disposed properly by the caller
-            return command.ExecuteReader(CommandBehavior.CloseConnection);
-        }
+            using var command = connection.CreateCommand();
+            command.CommandText = query;
 
-        public string GetPasswordByUsername(string username) {
+            var parameter = command.CreateParameter();
+            parameter.ParameterName = "@username";
+            parameter.Value = username;
+            command.Parameters.Add(parameter);
 
-            var Query = "SELECT password FROM accounts WHERE username=\"" + username + "\";";
-
-            var reader = ExecuteSql(Query);
-
-            if (reader.Read()) // Make sure to read the first record
+            using var reader = command.ExecuteReader();
+            if (reader.Read())
             {
-                string password = reader.GetString(reader.GetOrdinal("password"));
-
-                if (!string.IsNullOrEmpty(password))
+                User user = new User()
                 {
-                    return password;
-                }
-            }
+                    Id = reader.GetInt32(reader.GetOrdinal("ID")),
+                    Username = reader.GetString(reader.GetOrdinal("username")),
+                    Password = reader.GetString(reader.GetOrdinal("password")),
+                    Email = reader.GetString(reader.GetOrdinal("email"))
+                };
 
-            return "failed";
+                connection.Close();
+
+                return user;
+            }
+            connection.Close();
+            return null;
         }
 
-        public void CreateUserInDb(string username, string password) {
-            var Query = "INSERT INTO `accounts` (`ID`, `username`, `password`) VALUES (NULL, '"+username+"', '"+password+"');";
+        public void CreateUserInDb(string username, string password)
+        {
+            const string query = "INSERT INTO accounts (username, password) VALUES (@username, @password)";
 
             var connection = _context.Database.GetDbConnection();
             connection.Open();
 
-            var command = connection.CreateCommand();
-            command.CommandText = Query;
+            using var command = connection.CreateCommand();
+            command.CommandText = query;
 
-            command.ExecuteNonQuery(); // Use ExecuteNonQuery for INSERT statements
+            var usernameParam = command.CreateParameter();
+            usernameParam.ParameterName = "@username";
+            usernameParam.Value = username;
+            command.Parameters.Add(usernameParam);
 
-            connection.Close(); // Close connection explicitly
-            return;
+            var passwordParam = command.CreateParameter();
+            passwordParam.ParameterName = "@password";
+            passwordParam.Value = password;
+            command.Parameters.Add(passwordParam);
+
+            command.ExecuteNonQuery();
+
+            connection.Close();
         }
     }
 }

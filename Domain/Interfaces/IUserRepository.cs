@@ -9,8 +9,7 @@ namespace Domain.Interfaces
 {
     public interface IUserRepository
     {
-            string GetPasswordByUsername(string username);
-            public DbDataReader ExecuteSql(string sqlQuery);
-            public void CreateUserInDb(string username, string password);
+        User GetUserByUsername(string username);
+        public void CreateUserInDb(string username, string password);
     }
 }
