@@ -1,14 +1,21 @@
 ﻿using Domain.Interfaces;
+using System.Collections.Generic;
 
 namespace Domain
 {
     public class UserManager
     {
         private readonly IUserRepository _userRepository;
+        private readonly List<User> _users;
 
         public UserManager(IUserRepository userRepository)
         {
             _userRepository = userRepository;
+            _users = _userRepository.GetUsers();
+        }
+
+        public List<User> GetUsers() { 
+            return _users; 
         }
 
         public bool ValidateUser(string username, string password)

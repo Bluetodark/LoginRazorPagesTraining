@@ -9,6 +9,7 @@ namespace Domain.Interfaces
 {
     public interface IUserRepository
     {
+        List<User> GetUsers();
         User GetUserByUsername(string username);
         public void CreateUserInDb(string username, string password);
     }

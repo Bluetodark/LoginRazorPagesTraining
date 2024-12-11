@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
 using Domain;
 using Infrastructure;
-using Microsoft.EntityFrameworkCore;
 using Domain.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -75,5 +75,35 @@ namespace Infrastructure
 
             connection.Close();
         }
+
+        public List<User> GetUsers()
+        {
+            var connection = _context.Database.GetDbConnection();
+            connection.Open();
+
+            const string query = "SELECT ID, username, password, email FROM accounts";
+
+            using var command = connection.CreateCommand();
+            command.CommandText = query;
+
+            using var reader = command.ExecuteReader();
+
+            var users = new List<User>();
+
+            while (reader.Read())
+            {
+                var user = new User
+                {
+                    Id = reader.GetInt32(reader.GetOrdinal("ID")),
+                    Username = reader.GetString(reader.GetOrdinal("username")),
+                    Password = reader.GetString(reader.GetOrdinal("password")),
+                    Email = reader.GetString(reader.GetOrdinal("email"))
+                };
+                users.Add(user);
+            }
+
+            connection.Close();
+            return users;
+        }
     }
 }
