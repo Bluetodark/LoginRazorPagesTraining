@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 using System.Diagnostics.Eventing.Reader;
-using Infrastructure;
+using Domain.Interfaces;
 using Domain;
 
 namespace LoginRazorPagesTraining.Pages
@@ -13,10 +13,12 @@ namespace LoginRazorPagesTraining.Pages
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
+        private readonly UserManager _userManager;
 
-        public IndexModel(ILogger<IndexModel> logger)
+        public IndexModel(ILogger<IndexModel> logger, UserManager userManager)
         {
             _logger = logger;
+            _userManager = userManager;
         }
 
         [BindProperty]
@@ -24,15 +26,6 @@ namespace LoginRazorPagesTraining.Pages
 
         public void OnGet()
         {
-            // Directly instantiate MyDbContext without DbContextOptions
-            var dbContext = new MyDbContext();
-
-            // Create UserRepository and UserManager
-            var userRepository = new UserRepository(dbContext);
-            var userManager = new UserManager(userRepository);
-
-            // Fetch users
-            userManager.GetUsers();
         }
 
         public IActionResult OnPost()
@@ -41,12 +34,7 @@ namespace LoginRazorPagesTraining.Pages
             Console.WriteLine(Login.UserName);
             Console.WriteLine(Login.Password);
 
-            var dbContext = new MyDbContext();
-            var userRepository = new UserRepository(dbContext);
-
-            Domain.Interfaces.IUserManager userManager = new Domain.UserManager(userRepository);
-
-            if (userManager.ValidateUser(Login.UserName, Login.Password)) {
+            if (_userManager.ValidateUser(Login.UserName, Login.Password)) {
                 List<Claim> claims = new List<Claim>();
                 claims.Add(new Claim("ID", 1.ToString()));
 

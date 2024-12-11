@@ -5,25 +5,26 @@ using Infrastructure;
 using Domain;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace LoginRazorPagesTraining.Pages
 {
     public class RegisterModel : PageModel
     {
+        private readonly ILogger<RegisterModel> _logger;
+        private readonly UserManager _userManager;
+
         [BindProperty]
         public UserRegistration Registration { get; set; }
 
+        public RegisterModel(ILogger<RegisterModel> logger, UserManager userManager)
+        {
+            _logger = logger;
+            _userManager = userManager;
+        }
+
         public void OnGet()
         {
-            // Directly instantiate MyDbContext without DbContextOptions
-            var dbContext = new MyDbContext();
-
-            // Create UserRepository and UserManager
-            var userRepository = new UserRepository(dbContext);
-            var userManager = new UserManager(userRepository);
-
-            // Fetch users
-            userManager.GetUsers();
         }
 
         public IActionResult OnPost()
@@ -33,15 +34,13 @@ namespace LoginRazorPagesTraining.Pages
                 return Page();
             }
 
-            var dbContext = new MyDbContext();
-            var userRepository = new UserRepository(dbContext);
-
-            Domain.Interfaces.IUserManager userManager = new Domain.UserManager(userRepository);
-
-            if (userManager.CreateUser(Registration.UserName, Registration.ConfirmPassword)) {
-                Console.WriteLine("Registration successful! You can now log in."); 
-            } else {
-                Console.WriteLine("Username already taken. Please try again with a different username."); 
+            if (_userManager.CreateUser(Registration.UserName, Registration.ConfirmPassword))
+            {
+                Console.WriteLine("Registration successful! You can now log in.");
+            }
+            else
+            {
+                Console.WriteLine("Username already taken. Please try again with a different username.");
             }
 
             return RedirectToPage("Index");

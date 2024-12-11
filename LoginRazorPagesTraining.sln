@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.11.35303.130
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoginRazorPagesTraining", "LoginRazorPagesTraining\LoginRazorPagesTraining.csproj", "{8D0CC2C0-5513-49A6-99AB-438F10A18073}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AC667361-BE47-4EEF-8A31-4112CDBE0112} = {AC667361-BE47-4EEF-8A31-4112CDBE0112}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{846DB9DF-FD81-4388-9A09-5D820AA46F95}"
 EndProject

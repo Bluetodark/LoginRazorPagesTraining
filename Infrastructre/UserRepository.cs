@@ -1,10 +1,9 @@
-﻿using Infrastructre.Interfaces;
-using Infrastructure;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Data;
 using System.Data.Common;
+using Domain.Interfaces;
 
 namespace Infrastructure
 {
